@@ -3,11 +3,11 @@
   <title>tommm2的前端筆記</title>
   
   <subtitle>只要路是對的，就不怕路遠</subtitle>
-  <link href="http://tommm2.github.io.git/atom.xml" rel="self"/>
+  <link href="http://tommm2.github.io/atom.xml" rel="self"/>
   
-  <link href="http://tommm2.github.io.git/"/>
+  <link href="http://tommm2.github.io/"/>
   <updated>2021-09-30T11:46:42.241Z</updated>
-  <id>http://tommm2.github.io.git/</id>
+  <id>http://tommm2.github.io/</id>
   
   <author>
     <name>tommm2</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>test</title>
-    <link href="http://tommm2.github.io.git/2021/09/30/test/"/>
-    <id>http://tommm2.github.io.git/2021/09/30/test/</id>
+    <link href="http://tommm2.github.io/2021/09/30/test/"/>
+    <id>http://tommm2.github.io/2021/09/30/test/</id>
     <published>2021-09-30T11:45:27.000Z</published>
     <updated>2021-09-30T11:46:42.241Z</updated>
     
@@ -38,8 +38,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://tommm2.github.io.git/2021/09/30/hello-world/"/>
-    <id>http://tommm2.github.io.git/2021/09/30/hello-world/</id>
+    <link href="http://tommm2.github.io/2021/09/30/hello-world/"/>
+    <id>http://tommm2.github.io/2021/09/30/hello-world/</id>
     <published>2021-09-30T11:36:53.830Z</published>
     <updated>2021-09-30T11:36:53.830Z</updated>
     
