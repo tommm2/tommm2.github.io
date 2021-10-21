@@ -1,0 +1,503 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>從零開始的 Vue3 生活- 列表渲染與條件渲染 | &lt;TomDev /&gt;</title><meta name="keywords" content="前端,程式語言,Vue3"><meta name="author" content="tom"><meta name="copyright" content="tom"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言這篇主要介紹 v-for、v-if、v-show 是甚麼，以及如何使用。  v-if 和 v-showv-ifv-if 這個指令可以把它想成是元素的是 if 語法，當 v-if 的值等於 true 時，才會渲染，否則元素不會出現在網頁上，並且 v-if 也支援 JavaScript 的表達式。Vue 也提供了 v-else 和 v-else-if，作用是甚麼應該不用我多說了： &lt;div">
+<meta property="og:type" content="article">
+<meta property="og:title" content="從零開始的 Vue3 生活- 列表渲染與條件渲染">
+<meta property="og:url" content="http://tommm2.github.io/post/vue3(4)-%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93%E8%88%87%E6%A2%9D%E4%BB%B6%E6%B8%B2%E6%9F%93.html">
+<meta property="og:site_name" content="&lt;TomDev &#x2F;&gt;">
+<meta property="og:description" content="前言這篇主要介紹 v-for、v-if、v-show 是甚麼，以及如何使用。  v-if 和 v-showv-ifv-if 這個指令可以把它想成是元素的是 if 語法，當 v-if 的值等於 true 時，才會渲染，否則元素不會出現在網頁上，並且 v-if 也支援 JavaScript 的表達式。Vue 也提供了 v-else 和 v-else-if，作用是甚麼應該不用我多說了： &lt;div">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/jGN5mBE.png">
+<meta property="article:published_time" content="2021-10-21T01:41:02.000Z">
+<meta property="article:modified_time" content="2021-10-21T04:42:14.457Z">
+<meta property="article:author" content="tom">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="程式語言">
+<meta property="article:tag" content="Vue3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/jGN5mBE.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tommm2.github.io/post/vue3(4)-%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93%E8%88%87%E6%A2%9D%E4%BB%B6%E6%B8%B2%E6%9F%93"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '從零開始的 Vue3 生活- 列表渲染與條件渲染',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-10-21 12:42:14'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><style type="text/css">#toggle-sidebar {bottom: 80px}</style><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="<TomDev />" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.imgur.com/m10kuus.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分類</div><div class="length-num">1</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home()</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives()</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags()</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories()</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.imgur.com/jGN5mBE.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">&lt;TomDev /&gt;</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home()</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives()</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags()</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories()</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">從零開始的 Vue3 生活- 列表渲染與條件渲染</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2021-10-21T01:41:02.000Z" title="發表於 2021-10-21 09:41:02">2021-10-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2021-10-21T04:42:14.457Z" title="更新於 2021-10-21 12:42:14">2021-10-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Vue3/">Vue3</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字數總計:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀時長:</span><span>9分鐘</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="從零開始的 Vue3 生活- 列表渲染與條件渲染"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇主要介紹 <code>v-for</code>、<code>v-if</code>、<code>v-show</code> 是甚麼，以及如何使用。</p>
+<hr>
+<h2 id="v-if-和-v-show"><a href="#v-if-和-v-show" class="headerlink" title="v-if 和 v-show"></a><code>v-if</code> 和 <code>v-show</code></h2><h3 id="v-if"><a href="#v-if" class="headerlink" title="v-if"></a><code>v-if</code></h3><p><code>v-if</code> 這個指令可以把它想成是元素的是 if 語法，當 <code>v-if</code> 的值等於 <code>true</code> 時，才會渲染，否則元素不會出現在網頁上，並且 <code>v-if</code> 也支援 JavaScript 的表達式。Vue 也提供了 <code>v-else</code> 和 <code>v-else-if</code>，作用是甚麼應該不用我多說了：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h1 v-if&#x3D;&quot;who &#x3D;&#x3D;&#x3D; &#39;tom&#39;&quot;&gt;Hello Tom!&lt;&#x2F;h1&gt;
+  &lt;h1 v-else-if&#x3D;&quot;who &#x3D;&#x3D;&#x3D; &#39;lucy&#39;&quot;&gt;Hello Lucy!&lt;&#x2F;h1&gt;
+  &lt;h1 v-else&gt;Hello Brah!&lt;&#x2F;h1&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      who: &#39;Lucy&#39; 
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)
+</code></pre>
+
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h1&gt;Hello Lucy!&lt;&#x2F;h1&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<h3 id="v-show"><a href="#v-show" class="headerlink" title="v-show"></a><code>v-show</code></h3><p><code>v-show</code> 用法與 <code>v-if</code> 大致一樣，不同的地方是 <code>v-show</code> 一定會被保留在 DOM，它只是簡單的切換元素的 CSS 屬性 <code>display</code>，而 <code>v-if</code> 則是如果傳入的值是 <code>false</code>，那他就不會存在 DOM 裡：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;!-- 畫面不會顯示，並且不會存在於 DOM --&gt;
+  &lt;h1 v-if&#x3D;&quot;isShow&quot;&gt;Hello Vue3!&lt;&#x2F;h1&gt;
+  &lt;!-- 畫面不會顯示，但會存在於 DOM  --&gt;
+  &lt;p v-if&#x3D;&quot;isShow&quot;&gt;hello Vue2&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      isShow: false 
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p><img src="https://i.imgur.com/4sTn5Fw.jpg" alt="v-show"></p>
+<blockquote>
+<p><strong>Tips</strong></p>
+<ol>
+<li><code>v-show</code> 如果不為 <code>true</code>，則對此元素設置 <code>display: none</code>，並且還在 DOM 裡</li>
+<li><code>v-if</code> 如果不為 <code>true</code>，則不會出現在 DOM 裡</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="v-for"><a href="#v-for" class="headerlink" title="v-for"></a><code>v-for</code></h2><h3 id="v-for-使用陣列"><a href="#v-for-使用陣列" class="headerlink" title="v-for 使用陣列"></a><code>v-for</code> 使用陣列</h3><p>透過 <code>v-for</code>，我們可以減少重複使用的元素。讓 HTML 結構更明瞭。<code>v-for</code> 要使用 <code>item in items</code> 此種語法。<code>items</code> 就是你傳入的陣列，<code>item</code> 則是被迭代的陣列元素的別名，所以不一定要取名為 <code>item</code>：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;ul&gt;
+    &lt;li v-for&#x3D;&quot;person in persons&quot;&gt;
+      &#123;&#123; person.name &#125;&#125; - &#123;&#123; person.age &#125;&#125;
+    &lt;&#x2F;li&gt;
+  &lt;&#x2F;ul&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      persons: [
+        &#123; name: &#39;Tom&#39;, age: 22 &#125;,
+        &#123; name: &#39;lucy&#39;, age: 20&#125;
+      ] 
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Tom - 22&lt;&#x2F;li&gt;
+    &lt;li&gt;lucy - 20&lt;&#x2F;li&gt;
+  &lt;&#x2F;ul&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<p><code>v-for</code> 提供了第二個參數 <code>index</code> 參數，就是當前的索引：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;ul&gt;
+    &lt;li v-for&#x3D;&quot;(person, index) in persons&quot;&gt;
+      &#123;&#123; person.name &#125;&#125; - &#123;&#123; index &#125;&#125; - &#123;&#123; person.age &#125;&#125;
+    &lt;&#x2F;li&gt;
+  &lt;&#x2F;ul&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Tom - 0 - 22&lt;&#x2F;li&gt;
+    &lt;li&gt;lucy - 1 - 20&lt;&#x2F;li&gt;
+  &lt;&#x2F;ul&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<blockquote>
+<p><strong>Tips</strong><br>除了使用 <code>in</code>，還可以使用 <code>of</code> 語法：<code>&lt;div v-for=&quot;item of items&quot;&gt;&lt;/div&gt;</code></p>
+</blockquote>
+<h3 id="v-for-使用物件"><a href="#v-for-使用物件" class="headerlink" title="v-for 使用物件"></a><code>v-for</code> 使用物件</h3><p>你也可以傳入一個物件到 <code>v-for</code> 來遍歷物件的所有屬性：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div v-for&#x3D;&quot;value in objects&quot;&gt;
+    &#123;&#123; value &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      objects: &#123;
+        name: &#39;tom&#39;,
+        age: 20,
+        job: &#39;Frontend Developer&#39;
+      &#125;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div&gt;tom&lt;&#x2F;div&gt;
+  &lt;div&gt;20&lt;&#x2F;div&gt;
+  &lt;div&gt;Frontend Developer&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<p><code>v-for</code> 物件形式可傳入 3 個參數，記得一定要按照順序：</p>
+<ol>
+<li>屬性值 <code>value</code></li>
+<li>屬性名稱 <code>name</code></li>
+<li>索引 <code>index</code></li>
+</ol>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div v-for&#x3D;&quot;(value, name, index) in objects&quot;&gt;
+    &#123;&#123; name &#125;&#125; - &#123;&#123; value &#125;&#125; - &#123;&#123; index &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      objects: &#123;
+        name: &#39;tom&#39;,
+        age: 20,
+        job: &#39;Frontend Developer&#39;
+      &#125;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div&gt;name - tom - 0&lt;&#x2F;div&gt;
+  &lt;div&gt;age - 20 - 1&lt;&#x2F;div&gt;
+  &lt;div&gt;job - Frontend Developer - 2&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<h3 id="v-for-使用-key"><a href="#v-for-使用-key" class="headerlink" title="v-for 使用 key"></a><code>v-for</code> 使用 <code>key</code></h3><p><code>v-for</code> 更新已渲染的元素列表時，預設使用 “就地複用” 策略，當列表資料修改時，會根據 <code>key</code> 值去判斷某個值是否修改，如果修改，則重新渲染，否則複用之前的元素。而我們在使用時經常會用　<code>v-for</code> 的 <code>index</code> 來當作 <code>key</code>，但其實非常不推薦這樣做：</p>
+<p>假設有個 list 陣列：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div v-for&#x3D;&quot;(item, index) in list&quot; :key&#x3D;&quot;index&quot;&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      list: [
+        &#123; id: 1, name: &#39;test1&#39; &#125;,
+        &#123; id: 2, name: &#39;test2&#39; &#125;,
+        &#123; id: 3, name: &#39;test3&#39; &#125;
+      ]
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>如果在最後加入一個新資料：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      list: [
+        &#123; id: 1, name: &#39;test1&#39; &#125;,
+        &#123; id: 2, name: &#39;test2&#39; &#125;,
+        &#123; id: 3, name: &#39;test3&#39; &#125;,
+        &#123; id: 4, name: &#39;這筆資料懂得甚麼叫排隊&#39; &#125;,
+      ]
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>這時前三筆資料會複用之前的元素，這種時候用 <code>index</code> 作為 <code>key</code> 沒啥問題。</p>
+<p>但如果是在中間插入新資料：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      list: [
+        &#123; id: 1, name: &#39;test1&#39; &#125;,
+        &#123; id: 4, name: &#39;插隊的資料&#39; &#125;,
+        &#123; id: 2, name: &#39;test2&#39; &#125;,
+        &#123; id: 3, name: &#39;test3&#39; &#125;,
+      ]
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>此時更新渲染資料會發現：</p>
+<pre class="line-numbers language-none"><code class="language-none">原先的資料：　　　　　　　　　     插入後的資料：
+key: 1, index: 0 name: test1    key: 0, index: 0, name: test1
+key: 2, index: 1 name: test2    key: 1, index: 1, name: 這筆資料在插隊
+key: 3, index: 2 name: test3    key: 2, index: 2, name: test2
+                                key: 3, index: 3, name: test3</code></pre>
+<p>觀察上面會發現除了地一筆資料，其他三筆都被重新渲染了，這就是使用 <code>index</code> 當 <code>key</code> 的弊端，我明明只要修改一項資料，卻要重新渲染其他筆資料。</p>
+<p>這裡解決的辦法就是使用 list 裡的不會變動並且唯一的值 <code>id</code> 來當作 <code>key</code>：</p>
+<pre class="line-numbers language-none"><code class="language-none">原先的資料：　　　　　　　　　             插入後的資料：
+key: 1, id: 1, index: 0 name: test1    key: 1, id: 1,  index: 0, name: test1
+key: 2, id: 2, index: 1 name: test2    key: 4, id: 4,  index: 1, name: 這筆資料在插隊
+key: 3, id: 3, index: 2 name: test3    key: 2, id: 2,  index: 2, name: test2
+                                       key: 3, id: 3,  index: 3, name: test3</code></pre>
+<p>現在插入後的資料只有一筆資料做了變化，所以只需要新渲染這筆資料就好，其他資料會複用之前的資料。</p>
+<blockquote>
+<p><strong>懶人包</strong><br><code>key</code> 請綁定唯一並且不會變動的值，避免因更動一筆資料導致其他資料都需要重新渲染</p>
+</blockquote>
+<h3 id="v-for-不要和-v-if-一起使用"><a href="#v-for-不要和-v-if-一起使用" class="headerlink" title="v-for 不要和 v-if 一起使用"></a><code>v-for</code> 不要和 <code>v-if</code> 一起使用</h3><p>當這兩個指令在同個標籤時， <code>v-if</code> 的優先性會比 <code>v-for</code> 還高，這表示 <code>v-if</code> 無法使用 <code>v-for</code> 裡的變數：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;!-- Cannot read properties of undefined (reading &#39;isDone&#39;) --&gt;
+  &lt;div v-for&#x3D;&quot;todo in todos&quot; v-if&#x3D;&quot;!todo.isDone&quot;&gt;
+    &#123;&#123; todo.name &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      todos: [
+        &#123; name: &#39;learn Vue3&#39;, isDone: true &#125;,
+        &#123; name: &#39;learn JavaScript&#39;, isDone: false &#125;,
+      ]
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>如果不想多用一個元素包起來，可以使用 <code>&lt;template&gt;</code> 標籤，它不會被渲染到 DOM 上：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;template v-for&#x3D;&quot;todo in todos&quot;&gt;
+    &lt;div v-if&#x3D;&quot;!todo.isDone&quot;&gt;
+      &#123;&#123; todo.name &#125;&#125;
+    &lt;&#x2F;div&gt;
+  &lt;template&#x2F;&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<hr>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a target="_blank" rel="noopener" href="https://v3.cn.vuejs.org/guide/list.html">Vue 官網</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903577215827982">掘金</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">tom</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="http://tommm2.github.io/post/vue3(4)-%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93%E8%88%87%E6%A2%9D%E4%BB%B6%E6%B8%B2%E6%9F%93.html">http://tommm2.github.io/post/vue3(4)-%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93%E8%88%87%E6%A2%9D%E4%BB%B6%E6%B8%B2%E6%9F%93.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="http://tommm2.github.io" target="_blank"><TomDev /></a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%89%8D%E7%AB%AF/">前端</a><a class="post-meta__tags" href="/tags/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/">程式語言</a><a class="post-meta__tags" href="/tags/Vue3/">Vue3</a></div><div class="post_share"><div class="social-share" data-image="https://i.imgur.com/jGN5mBE.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/vue3(3)-vbind.html"><img class="next-cover" src="https://i.imgur.com/jGN5mBE.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">從零開始的 Vue3 生活- 動態屬性指令 v-bind</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相關推薦</span></div><div class="relatedPosts-list"><div><a href="/post/vue3(1)-%E5%AE%89%E8%A3%9D.html" title="從零開始的 Vue3 生活-安裝環境及建立應用程式"><img class="cover" src="https://i.imgur.com/jGN5mBE.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-13</div><div class="title">從零開始的 Vue3 生活-安裝環境及建立應用程式</div></div></a></div><div><a href="/post/vue3(2)-MVVM.html" title="從零開始的 Vue3 生活- MVVM 概念和 v-model"><img class="cover" src="https://i.imgur.com/jGN5mBE.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-17</div><div class="title">從零開始的 Vue3 生活- MVVM 概念和 v-model</div></div></a></div><div><a href="/post/vue3(3)-vbind.html" title="從零開始的 Vue3 生活- 動態屬性指令 v-bind"><img class="cover" src="https://i.imgur.com/jGN5mBE.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-20</div><div class="title">從零開始的 Vue3 生活- 動態屬性指令 v-bind</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#v-if-%E5%92%8C-v-show"><span class="toc-number">2.</span> <span class="toc-text">v-if 和 v-show</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#v-if"><span class="toc-number">2.1.</span> <span class="toc-text">v-if</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-show"><span class="toc-number">2.2.</span> <span class="toc-text">v-show</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#v-for"><span class="toc-number">3.</span> <span class="toc-text">v-for</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#v-for-%E4%BD%BF%E7%94%A8%E9%99%A3%E5%88%97"><span class="toc-number">3.1.</span> <span class="toc-text">v-for 使用陣列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-for-%E4%BD%BF%E7%94%A8%E7%89%A9%E4%BB%B6"><span class="toc-number">3.2.</span> <span class="toc-text">v-for 使用物件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-for-%E4%BD%BF%E7%94%A8-key"><span class="toc-number">3.3.</span> <span class="toc-text">v-for 使用 key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-for-%E4%B8%8D%E8%A6%81%E5%92%8C-v-if-%E4%B8%80%E8%B5%B7%E4%BD%BF%E7%94%A8"><span class="toc-number">3.4.</span> <span class="toc-text">v-for 不要和 v-if 一起使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">參考</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('https://i.imgur.com/8GF3gXf.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By tom</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">哈囉，歡迎你參觀我的部落格~</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><button id="go-up" type="button" title="回到頂部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script>(function(d, w, c) {
+    w.ChatraID = 'bf8Fr2HoQAbDa2b5n';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
