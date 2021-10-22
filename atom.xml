@@ -6,7 +6,7 @@
   <link href="http://tommm2.github.io/atom.xml" rel="self"/>
   
   <link href="http://tommm2.github.io/"/>
-  <updated>2021-10-21T04:42:14.457Z</updated>
+  <updated>2021-10-22T06:05:44.061Z</updated>
   <id>http://tommm2.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>從零開始的 Vue3 生活- 事件監聽</title>
+    <link href="http://tommm2.github.io/post/vue3(5)-%E4%BA%8B%E4%BB%B6%E7%9B%A3%E8%81%BD.html"/>
+    <id>http://tommm2.github.io/post/vue3(5)-%E4%BA%8B%E4%BB%B6%E7%9B%A3%E8%81%BD.html</id>
+    <published>2021-10-22T02:58:06.000Z</published>
+    <updated>2021-10-22T06:05:44.061Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇主要講解 <code>v-on</code> 這個事件監聽的指令，以及簡單描述一下 <code>methods</code> 這個物件，是 Vue 中最常用的指令。</p><hr><h2 id="監聽事件"><a href="#監聽事件" class="headerlink" title="監聽事件"></a>監聽事件</h2><p><code>v-on</code> 這個指令讓我們可以監聽 DOM 事件，如同 JavaScript 中的 addEventListener，在裡面可以帶入一個方法或是對 data 裡的屬性直接賦值。這裡以 click 事件舉例，用法為 <code>v-on:click=&quot;xxxx&quot;</code>，或是使用 <code>@</code> 簡寫 <code>@click=&quot;xxxx&quot;</code> 的方式：</p><pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;    &lt;button @click&#x3D;&quot;count +&#x3D; 1&quot;&gt;click&lt;&#x2F;button&gt;    &#123;&#123; count &#125;&#125;  &lt;&#x2F;div&gt;</code></pre><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;  data() &#123;    return &#123;      count: 0    &#125;  &#125;&#125;).mount(&#39;#app&#39;)</code></pre><hr><h2 id="事件處理方法"><a href="#事件處理方法" class="headerlink" title="事件處理方法"></a>事件處理方法</h2><p>上面那種直接在 <code>v-on</code> 裡寫 JavaScript 的方法有時候很方便，但大多數事件處理會更複雜，不會只有一行 JavaScript，這個時候 Vue 的 <code>methods</code> 就登場了：</p><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;  data() &#123;    return &#123;      count: 0    &#125;  &#125;,  methods: &#123;    addOne: function() &#123;      &#x2F;&#x2F; 做的事情就是將 count 加 1      this.count +&#x3D; 1    &#125;,    &#x2F;&#x2F; 簡寫    addTwo(num) &#123;      &#x2F;&#x2F; 將 count 加入傳入的數值      this.count +&#x3D; num    &#125;  &#125;&#125;).mount(&#39;#app&#39;)</code></pre><p>methods 這個物件在 Vue 裡是管理方法的地方。而在上面的是程式碼中，我們需要使用 this 來取用 <code>count</code> 這個資料屬性。這裡的 this 是指向 Vue 的實體，所以我們能在 methods 裡取用 <code>count</code>。</p><p>接下來我們就用 <code>v-on</code> 來處理 methods 裡的方法：</p><pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;  &lt;button @click&#x3D;&quot;addOne&quot;&gt;Add One&lt;&#x2F;button&gt;  &lt;!-- 可以像這樣傳遞參數 --&gt;  &lt;button @click&#x3D;&quot;addTwo(2)&quot;&gt;Add Two&lt;&#x2F;button&gt;  &lt;h1&gt;&#123;&#123; count &#125;&#125;&lt;&#x2F;h1&gt;&lt;&#x2F;div&gt;</code></pre><p><img src="https://i.imgur.com/AHwXr51.gif" alt="v-on 處理方法"></p><hr><h2 id="取用原生的-DOM-事件"><a href="#取用原生的-DOM-事件" class="headerlink" title="取用原生的 DOM 事件"></a>取用原生的 DOM 事件</h2><p>如果需要，我們可以用在方法傳入 <code>$event</code> 這個變數，來訪問原生地 DOM 事件：</p><pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;  &lt;button @click&#x3D;&quot;getOrigin($event)&quot;&gt;Get DOM Event&lt;&#x2F;button&gt;&lt;&#x2F;div&gt;</code></pre><pre class="line-numbers language-javaScript" data-language="javaScript"><code class="language-javaScript">const app &#x3D; Vue.createApp(&#123;  methods: &#123;    getOrigin(event) &#123;      &#x2F;&#x2F; 能看到原生的方法以及 DOM 節點      console.log(event)    &#125;  &#125;&#125;).mount(&#39;#app&#39;)</code></pre><hr><h2 id="處理多個方法"><a href="#處理多個方法" class="headerlink" title="處理多個方法"></a>處理多個方法</h2><p><code>v-on</code> 可以傳入多個方法，這些方法由逗號隔開，要注意的是處理多個方法時，都需要在方法後加括號：</p><pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;  &lt;button @click&#x3D;&quot;addOne(), addTwo(2)&quot;&gt;Add One&lt;&#x2F;button&gt;  &lt;h1&gt;&#123;&#123; count &#125;&#125;&lt;&#x2F;h1&gt;&lt;&#x2F;div&gt;</code></pre><hr><h2 id="事件修飾符"><a href="#事件修飾符" class="headerlink" title="事件修飾符"></a>事件修飾符</h2><p>有時候我們在防止事件冒泡或防止預設行為觸發時，會使用 <code>preventDefault()</code> 或 <code>stopPropagation()</code>，但 methods 在使用上的宗旨就是只有純粹的資料邏輯，而不是去處理 DOM 事件細節。</p><p>為解決此問題，<code>v-on</code> 提供了事件修飾符：</p><ul><li><code>.stop</code>：防止事件冒泡(由內而外依序觸發事件)</li><li><code>.prevent</code>：防止預設行為觸發，多用在 <code>submit</code> 事件</li><li><code>.capture</code>：事件捕獲(由外而內出發事件)</li><li><code>.self</code>：只觸發自己的事件，不包含子元素</li><li><code>.once</code>：只會觸發一次，之後就無法在觸發</li></ul><hr><h2 id="案件修飾符"><a href="#案件修飾符" class="headerlink" title="案件修飾符"></a>案件修飾符</h2><p>監聽鍵盤事件，我們會需要取用特定的按鍵，Vue 提供了鍵盤事件的修飾符：</p><pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;!-- 按下 ENTER 鍵時才調用 postWord 方法 --&gt;&lt;input type&#x3D;&quot;text&quot; @keyup.enter&#x3D;&quot;postWord&quot;&gt;</code></pre><p>按鍵修飾符有以下這些：</p><ul><li><code>.enter</code></li><li><code>.tab</code></li><li><code>.delete</code> (Delete 鍵和 倒退鍵)</li><li><code>.esc</code></li><li><code>.space</code></li><li><code>.up</code></li><li><code>.down</code></li><li><code>.left</code></li><li><code>.right</code></li><li><code>.ctrl</code></li><li><code>.alt</code></li><li><code>.shift</code></li></ul><hr><h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="https://v3.cn.vuejs.org/guide/list.html">Vue 官網</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;這篇主要講解 &lt;code&gt;v-on&lt;/code&gt; 這個事件監聽的指令，以及簡單描述一下 &lt;code&gt;methods&lt;/code&gt; 這個物件，</summary>
+      
+    
+    
+    
+    <category term="Vue 3" scheme="http://tommm2.github.io/categories/Vue-3/"/>
+    
+    
+    <category term="Vue" scheme="http://tommm2.github.io/tags/Vue/"/>
+    
+    <category term="前端" scheme="http://tommm2.github.io/tags/%E5%89%8D%E7%AB%AF/"/>
+    
+    <category term="程式語言" scheme="http://tommm2.github.io/tags/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/"/>
+    
+  </entry>
   
   <entry>
     <title>從零開始的 Vue3 生活- 列表渲染與條件渲染</title>

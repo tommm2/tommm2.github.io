@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>從零開始的 Vue3 生活-安裝環境及建立應用程式</title>
+    <url>//post/vue3(1)-%E5%AE%89%E8%A3%9D.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Vue 是一個漸進式框架，那麼何謂漸進式框架? 這裡簡單來的講就是想要使用甚麼功能可以自己決定，只需載入 Vue 的核心就好</p>
+<p>將 Vue 加入到專案的方式總共有 4 種：</p>
+<ol>
+<li>在 HTML 上以 CDN 方式引入</li>
+<li>下載 JavaScript 並自行管理 (這個方法其實跟 CDN 方式差不多)</li>
+<li>使用 npm 安裝</li>
+<li>使用官方的 CLI 來建立專案</li>
+</ol>
+<hr>
+<h2 id="CDN-載入"><a href="#CDN-載入" class="headerlink" title="CDN 載入"></a>CDN 載入</h2><p>在學習時或是在開發小專案時，用 CDN 載入是比較方便的選擇：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;unpkg.com&#x2F;vue@next&quot;&gt;&lt;&#x2F;script&gt;</code></pre>
+
+<p>CDN 上 @next 指的是 Vue 目前最新的版本，目前最新的版本是 3.x，當然你也可以使用 2.x 版本：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;vue@2.6.14&quot;&gt;&lt;&#x2F;script&gt;</code></pre>
+
+<hr>
+<h2 id="npm-載入"><a href="#npm-載入" class="headerlink" title="npm 載入"></a>npm 載入</h2><p>用 Vue 開發大型應用時推薦使用 npm 安裝，npm 能很好的配合 webpack 等等打包工具使用：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 最新穩定版
+$ npm install vue@next</code></pre>
+
+<hr>
+<h2 id="CLI-載入"><a href="#CLI-載入" class="headerlink" title="CLI 載入"></a>CLI 載入</h2><p>Vue 提供了一個 <a href="https://cli.vuejs.org/guide/">官方的 CLI</a>，能為單頁式應用(SPA)快速地建置專案以及專案需要使用的功能。只要幾分鐘就能運行，並能帮助你在不需重新啟動程式的情况下快速的進行測試等等。</p>
+<blockquote>
+<p>建議先熟悉 CDN 方式了解 Vue 後，再使用 CLI 建構，會比較有頭緒自己在幹嘛。</p>
+</blockquote>
+<p>如果是用 Vue3.x 版本，要使用 Vue CLI v4.5.x 版本：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">yarn global add @vue&#x2F;cli
+# 或
+npm install -g @vue&#x2F;cli</code></pre>
+
+<p>需要升級版本的話：</p>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">vue upgrade --next</code></pre>
+
+<hr>
+<h2 id="Vue-devtools-擴充功能"><a href="#Vue-devtools-擴充功能" class="headerlink" title="Vue devtools 擴充功能"></a>Vue devtools 擴充功能</h2><p>一個實用的 <a href="https://chrome.google.com/webstore/detail/vuejs-devtools/ljjemllljcmogpfapbkkighbhhppjdbg">Chrome 擴充套件</a>，可以在裡面檢查元件等等的資料變化按下 F12 開發者工具查看：</p>
+<p><img src="https://i.imgur.com/TQkLfMu.jpg" alt="Vue devtools"></p>
+<h2 id="建立應用程式"><a href="#建立應用程式" class="headerlink" title="建立應用程式"></a>建立應用程式</h2><p>先創建一個 HTML，裡面包含以下程式碼：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;!-- 雙大括號用來包要顯示的資料、 --&gt;
+  &#123;&#123; message &#125;&#125;
+
+  &lt;!-- 雙大括號也可以填入 JavaScript 的表達式 --&gt;
+  &#123;&#123; message + &#39;tom&#39; &#125;&#125;
+&lt;&#x2F;div&gt;
+&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;unpkg.com&#x2F;vue@next&quot;&gt;&lt;&#x2F;script&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; &#123;
+  data() &#123;
+    return &#123;
+      message: &#39;Hello World&#39;,
+    &#125;
+  &#125;
+&#125;
+
+&#x2F;&#x2F; mount 指定要掛載元素
+Vue.createApp(app).mount(&#39;#app&#39;)</code></pre>
+
+<h3 id="Mustache-插值"><a href="#Mustache-插值" class="headerlink" title="Mustache 插值"></a>Mustache 插值</h3><p>資料綁定最常見的方式就是使用 “Mustache” 語法(雙大括號)來插值：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div&gt;&#123;&#123; name &#125;&#125;&lt;&#x2F;div&gt;</code></pre>
+
+<p>除了能綁定 data 裡的屬性值，也能在裡面使用 JavaScript 的表達式：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div&gt;&#123;&#123; name + 1 &#125;&#125;&lt;&#x2F;div&gt;
+&lt;div&gt;&#123;&#123; name ? &#39;tom&#39; : &#39;lucy&#39; &#125;&#125;&lt;&#x2F;div&gt;
+&lt;div&gt;&#123;&#123; name.split(&#39;&#39;) &#125;&#125;&lt;&#x2F;div&gt;</code></pre>
+
+
+<hr>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a href="https://v3.cn.vuejs.org/">Vue官方</a></p>
+]]></content>
+      <categories>
+        <category>Vue3</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>前端</tag>
+        <tag>程式語言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>從零開始的 Vue3 生活- MVVM 概念和 v-model</title>
+    <url>//post/vue3(2)-MVVM.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇要來介紹一下 MVVM 模型，雖然 Vue 沒有完全遵循 MVVM 的概念，但 Vue 的設計也是受到此模型的影響。</p>
+<hr>
+<h2 id="甚麼是-MVVM"><a href="#甚麼是-MVVM" class="headerlink" title="甚麼是 MVVM?"></a>甚麼是 MVVM?</h2><p>是一種軟體架構模式，MVVM 的全名為 Model-View-ViewModel，它們分別代表：</p>
+<ul>
+<li>Model 是資料存取層(資料狀態)</li>
+<li>View 是畫面顯示層，也就是你現在看到的網頁(視圖)</li>
+<li>View-Model 是資料與顯示互動中介層(資料聯繫器)</li>
+</ul>
+<p><img src="https://i.imgur.com/rOMnhlL.png" alt="MVVM 示意圖"></p>
+<p>在 MVVM 架構下，View 和 Model 並沒有直接的聯繫，而是透過 View-Model 來進行交流。View-Model 透過資料雙向綁定將 View 和 Model 聯繫起來，使得 View 和 Model 的同步工作是自動的。所以當 Model 改變時，View 也會跟著做改變；反過來也是一樣。</p>
+<h2 id="v-model-資料雙向綁定"><a href="#v-model-資料雙向綁定" class="headerlink" title="v-model 資料雙向綁定"></a><code>v-model</code> 資料雙向綁定</h2><p><code>v-model</code> 這個指令常用在表單元素，為實現資料雙向綁定。</p>
+<h3 id="綁定-lt-input-gt-："><a href="#綁定-lt-input-gt-：" class="headerlink" title="綁定 &lt;input&gt;："></a>綁定 <code>&lt;input&gt;</code>：</h3><p><img src="https://i.imgur.com/hav89tS.gif" alt="input 綁定 v-model"></p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;input type&#x3D;&quot;text&quot; v-model&#x3D;&quot;name&quot;&#x2F;&gt;
+  &lt;span&gt;&#123;&#123; name &#125;&#125;&lt;&#x2F;span&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      name: &#39;&#39;,
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<hr>
+<h3 id="綁定-lt-select-gt-："><a href="#綁定-lt-select-gt-：" class="headerlink" title="綁定 &lt;select&gt;："></a>綁定 <code>&lt;select&gt;</code>：</h3><p><img src="https://i.imgur.com/4yLiMB2.gif" alt="select 綁定 v-model"></p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;select v-model&#x3D;&quot;name&quot;&gt;
+    &lt;option value&#x3D;&quot;tom&quot;&gt;tom&lt;&#x2F;option&gt;
+    &lt;option value&#x3D;&quot;lucy&quot;&gt;lucy&lt;&#x2F;option&gt;
+    &lt;option value&#x3D;&quot;tony&quot;&gt;tony&lt;&#x2F;option&gt;
+  &lt;&#x2F;select&gt;
+  &lt;div&gt;
+    選擇的名字: &#123;&#123; name &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      name: &#39;&#39;,
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<hr>
+<h3 id="綁定-checkbox"><a href="#綁定-checkbox" class="headerlink" title="綁定 checkbox"></a>綁定 checkbox</h3><p>checkbox 勾選和沒有勾選時預設會回傳 true 和 false。我們也可以透過 <code>:true-value</code> 和 <code>:false-value</code> 來決定回傳值：</p>
+<p><img src="https://i.imgur.com/ObpTR9z.gif" alt="checkbox 綁 v-model"></p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h3&gt;預設取得 boolean 值&lt;&#x2F;h3&gt;
+  &lt;input type&#x3D;&quot;checkbox&quot; v-model&#x3D;&quot;markWithBoolean&quot;&gt;
+  &lt;div&gt;
+    以勾選: &#123;&#123; markWithBoolean &#125;&#125;
+  &lt;&#x2F;div&gt;
+  &lt;h3&gt;將預設的 true 和 false 值改成其他值&lt;&#x2F;h3&gt;
+  &lt;!-- 將 true 和 false 值分別改成 1 跟 0 --&gt;
+  &lt;input 
+    type&#x3D;&quot;checkbox&quot; 
+    v-model&#x3D;&quot;markWithNumber&quot; 
+    :true-value&#x3D;&quot;1&quot; 
+    :false-value&#x3D;&quot;0&quot;
+  &gt;
+  &lt;div&gt;
+    以勾選: &#123;&#123; markWithNumber &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      markWithBoolean: false,
+      markWithNumber: 0,
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<h3 id="v-model-修飾符"><a href="#v-model-修飾符" class="headerlink" title="v-model 修飾符"></a><code>v-model</code> 修飾符</h3><p><code>v-model</code> 除了能做資料雙向綁定，還提供額外的修飾符(modifiers)</p>
+<p>用法: <code>v-model.xxx</code></p>
+<p><code>.lazy</code>：使用者離開 input 時才會更新資料</p>
+<p><code>.number</code>：強制將使用者輸入的數值轉成 Number 型別，輸入字串時轉換無效</p>
+<p><code>.trim</code>：將頭尾空白去除</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a href="https://juejin.cn/post/6844903929298288647">掘金論壇</a><br><a href="https://cythilya.github.io/2017/04/14/vue-data-v-model/">Summer。桑莫。夏天</a></p>
+]]></content>
+      <categories>
+        <category>Vue3</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>前端</tag>
+        <tag>程式語言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>從零開始的 Vue3 生活- 動態屬性指令 v-bind</title>
+    <url>//post/vue3(3)-vbind.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇主要說明 Vue 的 <code>v-bind</code> 指令，它可以將資料綁定在 HTML 的標籤上，是非常實用又常用的指令，但在介紹 <code>v-bind</code> 前，我們先來介紹比較簡單的兩個指令：<code>v-text</code> 和 <code>v-html</code>。</p>
+<hr>
+<h2 id="v-text-和-v-html"><a href="#v-text-和-v-html" class="headerlink" title="v-text 和 v-html"></a><code>v-text</code> 和 <code>v-html</code></h2><p><code>v-text</code> 這個指令只能用來呈現資料裡的文字，而 <code>v-html</code> 則是如果資料裡面有包含 html 的標籤，可以把它解析成 html：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;!-- 顯示帶有 html 結構的文字 --&gt;
+&lt;div v-text&#x3D;&quot;message&quot;&gt;&lt;&#x2F;div&gt; 
+
+&lt;!-- 顯示解析 html 後的文字 --&gt;
+&lt;div v-html&#x3D;&quot;message&quot;&gt;&lt;&#x2F;div&gt; </code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+   data() &#123;
+    return &#123;
+      message: &#39;Hi &lt;strong&gt;Vue3&lt;&#x2F;strong&gt;&#39;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p><code>v-text</code> 會顯示：<code>Hi&lt;strong&gt;Vue3&lt;/strong&gt;</code><br><code>v-html</code> 會顯示： Hi <strong>Vue3</strong></p>
+<hr>
+<h2 id="v-bind"><a href="#v-bind" class="headerlink" title="v-bind"></a><code>v-bind</code></h2><p>以下這個範例我們想將一個圖片網址的資料綁定到 img 的 src 屬性上，如果在 src 裡包上雙大括號會發現沒有反應，這時候我們就可以使用 <code>v-bind</code> 來在屬性上綁定資料：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;!-- 錯誤示範，圖片無法顯示 --&gt;
+  &lt;img src&#x3D;&quot;&#123;&#123; imgUrl &#125;&#125;&quot;&#x2F;&gt;
+
+  &lt;!-- 正確示範 --&gt;
+  &lt;img 
+    v-bind:src&#x3D;&quot;imgUrl&quot;
+    v-bind:alt&#x3D;&quot;description&quot;
+  &#x2F;&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      imgUrl: &#39;https:&#x2F;&#x2F;fakeimg.pl&#x2F;200x100&#x2F;&#39;,
+      description: &#39;fake-img&#39;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>最後 <code>&lt;img&gt;</code> 渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;img src&#x3D;&quot;https:&#x2F;&#x2F;fakeimg.pl&#x2F;200x100&#x2F;&quot; alt&#x3D;&quot;fake-img&quot;&#x2F;&gt;</code></pre>
+
+<blockquote>
+<p><strong>Tips</strong> </p>
+<ol>
+<li><code>v-bind</code> 可以綁定多個屬性</li>
+<li><code>v-bind</code> 可簡寫成 <code>:</code>，例如： <code>&lt;div :id=&quot;xxx&quot;&gt;</code></li>
+<li>要綁定的資料的名字不要與標籤屬性一樣，例如： <code>&lt;img :src=&quot;src&quot;&gt;</code></li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="v-bind-綁定-class-物件方式"><a href="#v-bind-綁定-class-物件方式" class="headerlink" title="v-bind 綁定 class(物件方式)"></a><code>v-bind</code> 綁定 class(物件方式)</h3><p>以 <code>v-bind</code> 綁定 class 來說，我們可以給 <code>:class</code> 傳遞一個物件，方便我們動態切換 class：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div :class&#x3D;&quot;&#123; active : isActive &#125;&quot;&gt;&lt;&#x2F;div&gt;</code></pre>
+<p>上面這段表示 <code>active</code> 這個 class 的存在與否，受 <code>isActive</code> 影響。如果是 <code>isActive</code> 是 <code>true</code>，則帶有 <code>active</code> 這個 class，反之則無。</p>
+<p>而你也可以在物件裡傳入多個 class。並且 <code>:class</code> 能與普通的 class 共存：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div
+    class&#x3D;&quot;static&quot;
+    :class&#x3D;&quot;&#123; active: isActive, &#39;text-danger&#39;: hasError &#125;&quot;
+  &gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      isActive: true,
+      hasError: false
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p><code>div</code> 渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div class&#x3D;&quot;static active&quot;&gt;</code></pre>
+
+<blockquote>
+<p><strong>tips</strong><br>如果在物件裡綁定的值有包含特殊符號，請用單引號包裹起來，例如:<br><code>:class=&quot;&#123; &#39;text-danger&#39;: hasError &#125;&quot;</code></p>
+</blockquote>
+<h3 id="v-bind-綁定-class-陣列方式"><a href="#v-bind-綁定-class-陣列方式" class="headerlink" title="v-bind 綁定 class(陣列方式)"></a><code>v-bind</code> 綁定 class(陣列方式)</h3><p>除了能傳遞物件，我們也能傳遞陣列：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;!-- 綁定多個 class --&gt;
+  &lt;div :class&#x3D;&quot;[activeClass, dangerClass]&quot;&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<p>如果想根據條件切換 class，也能這樣用：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div :class&#x3D;&quot;[isActive ? activeClass : &#39;&#39;, dangerClass]&quot;&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<p>陣列裡面可以包含表達式。如果 <code>isActive</code> 是 <code>true</code>，回傳 <code>activeClass</code>，否則回傳空字串，並且始終添加 <code>dangerClass</code>。</p>
+<p>但當有多個條件 class 時，向上面這樣寫會有點冗長，所以陣列裡也能使用物件：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div :class&#x3D;&quot;[&#123; active: isActive &#125;, dangerClass]&quot;&gt;
+&lt;&#x2F;div</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      activeClass: &#39;active&#39;,
+      isActive: true,
+      dangerClass: &#39;danger&#39;,
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<h3 id="v-bind-綁定-style"><a href="#v-bind-綁定-style" class="headerlink" title="v-bind 綁定 style"></a><code>v-bind</code> 綁定 style</h3><p><code>:style</code> 綁定特別要注意的地方就是屬性名字要使用駝峰式，或是使用橫線分隔(要用單引號包住)，並且能使用表達式：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div 
+    :style&#x3D;&quot;&#123; color: color, fontSize: size + &#39;px&#39; &#125;&quot;&gt;
+  &lt;&#x2F;div&gt;
+  &lt;!-- or --&gt;
+  &lt;div 
+    :style&#x3D;&quot;&#123; color: color, fontSize: &#96;$&#123;size&#125;px&#96; &#125;&quot;&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      color: &#39;red&#39;,
+      size: 30,
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>你也可以直接綁定一個物件，這樣能讓結構更明瞭：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div :style&#x3D;&quot;allStyle&quot;&gt;&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      allStyle: &#123;
+        color: &#39;red&#39;,
+        fontSize: &#39;30px&#39;
+      &#125;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>或者你也可以綁定一個陣列，裡面傳入多個物件，來綁定更多的 CSS 屬性：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div :style&#x3D;&quot;[boxModel, bgColor]&quot;&gt;1234&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+   data() &#123;
+     return &#123;
+       boxModel: &#123;
+         margin: &#39;1rem&#39;,
+         padding: &#39;1rem&#39;
+       &#125;,
+       bgColor: &#123;
+         backgroundColor: &#39;red&#39;,
+         color: &#39;#fff&#39; 
+       &#125;
+     &#125;
+   &#125;
+ &#125;).mount(&#39;#app&#39;)</code></pre>
+<hr>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="https://v3.cn.vuejs.org/guide/class-and-style.html#%E7%BB%91%E5%AE%9A-html-class">Vue 官網</a></p>
+]]></content>
+      <categories>
+        <category>Vue3</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>前端</tag>
+        <tag>程式語言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>從零開始的 Vue3 生活- 列表渲染與條件渲染</title>
+    <url>//post/vue3(4)-%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93%E8%88%87%E6%A2%9D%E4%BB%B6%E6%B8%B2%E6%9F%93.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇主要介紹 <code>v-for</code>、<code>v-if</code>、<code>v-show</code> 是甚麼，以及如何使用。</p>
+<hr>
+<h2 id="v-if-和-v-show"><a href="#v-if-和-v-show" class="headerlink" title="v-if 和 v-show"></a><code>v-if</code> 和 <code>v-show</code></h2><h3 id="v-if"><a href="#v-if" class="headerlink" title="v-if"></a><code>v-if</code></h3><p><code>v-if</code> 這個指令可以把它想成是元素的是 if 語法，當 <code>v-if</code> 的值等於 <code>true</code> 時，才會渲染，否則元素不會出現在網頁上，並且 <code>v-if</code> 也支援 JavaScript 的表達式。Vue 也提供了 <code>v-else</code> 和 <code>v-else-if</code>，作用是甚麼應該不用我多說了：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h1 v-if&#x3D;&quot;who &#x3D;&#x3D;&#x3D; &#39;tom&#39;&quot;&gt;Hello Tom!&lt;&#x2F;h1&gt;
+  &lt;h1 v-else-if&#x3D;&quot;who &#x3D;&#x3D;&#x3D; &#39;lucy&#39;&quot;&gt;Hello Lucy!&lt;&#x2F;h1&gt;
+  &lt;h1 v-else&gt;Hello Brah!&lt;&#x2F;h1&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      who: &#39;Lucy&#39; 
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)
+</code></pre>
+
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h1&gt;Hello Lucy!&lt;&#x2F;h1&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<h3 id="v-show"><a href="#v-show" class="headerlink" title="v-show"></a><code>v-show</code></h3><p><code>v-show</code> 用法與 <code>v-if</code> 大致一樣，不同的地方是 <code>v-show</code> 一定會被保留在 DOM，它只是簡單的切換元素的 CSS 屬性 <code>display</code>，而 <code>v-if</code> 則是如果傳入的值是 <code>false</code>，那他就不會存在 DOM 裡：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;!-- 畫面不會顯示，並且不會存在於 DOM --&gt;
+  &lt;h1 v-if&#x3D;&quot;isShow&quot;&gt;Hello Vue3!&lt;&#x2F;h1&gt;
+  &lt;!-- 畫面不會顯示，但會存在於 DOM  --&gt;
+  &lt;p v-if&#x3D;&quot;isShow&quot;&gt;hello Vue2&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      isShow: false 
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p><img src="https://i.imgur.com/4sTn5Fw.jpg" alt="v-show"></p>
+<blockquote>
+<p><strong>Tips</strong></p>
+<ol>
+<li><code>v-show</code> 如果不為 <code>true</code>，則對此元素設置 <code>display: none</code>，並且還在 DOM 裡</li>
+<li><code>v-if</code> 如果不為 <code>true</code>，則不會出現在 DOM 裡</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="v-for"><a href="#v-for" class="headerlink" title="v-for"></a><code>v-for</code></h2><h3 id="v-for-使用陣列"><a href="#v-for-使用陣列" class="headerlink" title="v-for 使用陣列"></a><code>v-for</code> 使用陣列</h3><p>透過 <code>v-for</code>，我們可以減少重複使用的元素。讓 HTML 結構更明瞭。<code>v-for</code> 要使用 <code>item in items</code> 此種語法。<code>items</code> 就是你傳入的陣列，<code>item</code> 則是被迭代的陣列元素的別名，所以不一定要取名為 <code>item</code>：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;ul&gt;
+    &lt;li v-for&#x3D;&quot;person in persons&quot;&gt;
+      &#123;&#123; person.name &#125;&#125; - &#123;&#123; person.age &#125;&#125;
+    &lt;&#x2F;li&gt;
+  &lt;&#x2F;ul&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      persons: [
+        &#123; name: &#39;Tom&#39;, age: 22 &#125;,
+        &#123; name: &#39;lucy&#39;, age: 20&#125;
+      ] 
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Tom - 22&lt;&#x2F;li&gt;
+    &lt;li&gt;lucy - 20&lt;&#x2F;li&gt;
+  &lt;&#x2F;ul&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<p><code>v-for</code> 提供了第二個參數 <code>index</code> 參數，就是當前的索引：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;ul&gt;
+    &lt;li v-for&#x3D;&quot;(person, index) in persons&quot;&gt;
+      &#123;&#123; person.name &#125;&#125; - &#123;&#123; index &#125;&#125; - &#123;&#123; person.age &#125;&#125;
+    &lt;&#x2F;li&gt;
+  &lt;&#x2F;ul&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Tom - 0 - 22&lt;&#x2F;li&gt;
+    &lt;li&gt;lucy - 1 - 20&lt;&#x2F;li&gt;
+  &lt;&#x2F;ul&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<blockquote>
+<p><strong>Tips</strong><br>除了使用 <code>in</code>，還可以使用 <code>of</code> 語法：<code>&lt;div v-for=&quot;item of items&quot;&gt;&lt;/div&gt;</code></p>
+</blockquote>
+<h3 id="v-for-使用物件"><a href="#v-for-使用物件" class="headerlink" title="v-for 使用物件"></a><code>v-for</code> 使用物件</h3><p>你也可以傳入一個物件到 <code>v-for</code> 來遍歷物件的所有屬性：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div v-for&#x3D;&quot;value in objects&quot;&gt;
+    &#123;&#123; value &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      objects: &#123;
+        name: &#39;tom&#39;,
+        age: 20,
+        job: &#39;Frontend Developer&#39;
+      &#125;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div&gt;tom&lt;&#x2F;div&gt;
+  &lt;div&gt;20&lt;&#x2F;div&gt;
+  &lt;div&gt;Frontend Developer&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<p><code>v-for</code> 物件形式可傳入 3 個參數，記得一定要按照順序：</p>
+<ol>
+<li>屬性值 <code>value</code></li>
+<li>屬性名稱 <code>name</code></li>
+<li>索引 <code>index</code></li>
+</ol>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div v-for&#x3D;&quot;(value, name, index) in objects&quot;&gt;
+    &#123;&#123; name &#125;&#125; - &#123;&#123; value &#125;&#125; - &#123;&#123; index &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      objects: &#123;
+        name: &#39;tom&#39;,
+        age: 20,
+        job: &#39;Frontend Developer&#39;
+      &#125;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>渲染結果為：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div&gt;name - tom - 0&lt;&#x2F;div&gt;
+  &lt;div&gt;age - 20 - 1&lt;&#x2F;div&gt;
+  &lt;div&gt;job - Frontend Developer - 2&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<h3 id="v-for-使用-key"><a href="#v-for-使用-key" class="headerlink" title="v-for 使用 key"></a><code>v-for</code> 使用 <code>key</code></h3><p><code>v-for</code> 更新已渲染的元素列表時，預設使用 “就地複用” 策略，當列表資料修改時，會根據 <code>key</code> 值去判斷某個值是否修改，如果修改，則重新渲染，否則複用之前的元素。而我們在使用時經常會用　<code>v-for</code> 的 <code>index</code> 來當作 <code>key</code>，但其實非常不推薦這樣做：</p>
+<p>假設有個 list 陣列：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;div v-for&#x3D;&quot;(item, index) in list&quot; :key&#x3D;&quot;index&quot;&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      list: [
+        &#123; id: 1, name: &#39;test1&#39; &#125;,
+        &#123; id: 2, name: &#39;test2&#39; &#125;,
+        &#123; id: 3, name: &#39;test3&#39; &#125;
+      ]
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>如果在最後加入一個新資料：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      list: [
+        &#123; id: 1, name: &#39;test1&#39; &#125;,
+        &#123; id: 2, name: &#39;test2&#39; &#125;,
+        &#123; id: 3, name: &#39;test3&#39; &#125;,
+        &#123; id: 4, name: &#39;這筆資料懂得甚麼叫排隊&#39; &#125;,
+      ]
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>這時前三筆資料會複用之前的元素，這種時候用 <code>index</code> 作為 <code>key</code> 沒啥問題。</p>
+<p>但如果是在中間插入新資料：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      list: [
+        &#123; id: 1, name: &#39;test1&#39; &#125;,
+        &#123; id: 4, name: &#39;插隊的資料&#39; &#125;,
+        &#123; id: 2, name: &#39;test2&#39; &#125;,
+        &#123; id: 3, name: &#39;test3&#39; &#125;,
+      ]
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>此時更新渲染資料會發現：</p>
+<pre class="line-numbers language-none"><code class="language-none">原先的資料：　　　　　　　　　     插入後的資料：
+key: 1, index: 0 name: test1    key: 0, index: 0, name: test1
+key: 2, index: 1 name: test2    key: 1, index: 1, name: 這筆資料在插隊
+key: 3, index: 2 name: test3    key: 2, index: 2, name: test2
+                                key: 3, index: 3, name: test3</code></pre>
+<p>觀察上面會發現除了地一筆資料，其他三筆都被重新渲染了，這就是使用 <code>index</code> 當 <code>key</code> 的弊端，我明明只要修改一項資料，卻要重新渲染其他筆資料。</p>
+<p>這裡解決的辦法就是使用 list 裡的不會變動並且唯一的值 <code>id</code> 來當作 <code>key</code>：</p>
+<pre class="line-numbers language-none"><code class="language-none">原先的資料：　　　　　　　　　             插入後的資料：
+key: 1, id: 1, index: 0 name: test1    key: 1, id: 1,  index: 0, name: test1
+key: 2, id: 2, index: 1 name: test2    key: 4, id: 4,  index: 1, name: 這筆資料在插隊
+key: 3, id: 3, index: 2 name: test3    key: 2, id: 2,  index: 2, name: test2
+                                       key: 3, id: 3,  index: 3, name: test3</code></pre>
+<p>現在插入後的資料只有一筆資料做了變化，所以只需要新渲染這筆資料就好，其他資料會複用之前的資料。</p>
+<blockquote>
+<p><strong>懶人包</strong><br><code>key</code> 請綁定唯一並且不會變動的值，避免因更動一筆資料導致其他資料都需要重新渲染</p>
+</blockquote>
+<h3 id="v-for-不要和-v-if-一起使用"><a href="#v-for-不要和-v-if-一起使用" class="headerlink" title="v-for 不要和 v-if 一起使用"></a><code>v-for</code> 不要和 <code>v-if</code> 一起使用</h3><p>當這兩個指令在同個標籤時， <code>v-if</code> 的優先性會比 <code>v-for</code> 還高，這表示 <code>v-if</code> 無法使用 <code>v-for</code> 裡的變數：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;!-- Cannot read properties of undefined (reading &#39;isDone&#39;) --&gt;
+  &lt;div v-for&#x3D;&quot;todo in todos&quot; v-if&#x3D;&quot;!todo.isDone&quot;&gt;
+    &#123;&#123; todo.name &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      todos: [
+        &#123; name: &#39;learn Vue3&#39;, isDone: true &#125;,
+        &#123; name: &#39;learn JavaScript&#39;, isDone: false &#125;,
+      ]
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<p>如果不想多用一個元素包起來，可以使用 <code>&lt;template&gt;</code> 標籤，它不會被渲染到 DOM 上：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;template v-for&#x3D;&quot;todo in todos&quot;&gt;
+    &lt;div v-if&#x3D;&quot;!todo.isDone&quot;&gt;
+      &#123;&#123; todo.name &#125;&#125;
+    &lt;&#x2F;div&gt;
+  &lt;template&#x2F;&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<hr>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="https://v3.cn.vuejs.org/guide/list.html">Vue 官網</a><br><a href="https://juejin.cn/post/6844903577215827982">掘金</a></p>
+]]></content>
+      <categories>
+        <category>Vue3</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
+        <tag>程式語言</tag>
+        <tag>Vue3</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>從零開始的 Vue3 生活- 事件監聽</title>
+    <url>//post/vue3(5)-%E4%BA%8B%E4%BB%B6%E7%9B%A3%E8%81%BD.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇主要講解 <code>v-on</code> 這個事件監聽的指令，以及簡單描述一下 <code>methods</code> 這個物件，是 Vue 中最常用的指令。</p>
+<hr>
+<h2 id="監聽事件"><a href="#監聽事件" class="headerlink" title="監聽事件"></a>監聽事件</h2><p><code>v-on</code> 這個指令讓我們可以監聽 DOM 事件，如同 JavaScript 中的 addEventListener，在裡面可以帶入一個方法或是對 data 裡的屬性直接賦值。這裡以 click 事件舉例，用法為 <code>v-on:click=&quot;xxxx&quot;</code>，或是使用 <code>@</code> 簡寫 <code>@click=&quot;xxxx&quot;</code> 的方式：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+    &lt;button @click&#x3D;&quot;count +&#x3D; 1&quot;&gt;click&lt;&#x2F;button&gt;
+    &#123;&#123; count &#125;&#125;
+  &lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      count: 0
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<hr>
+<h2 id="事件處理方法"><a href="#事件處理方法" class="headerlink" title="事件處理方法"></a>事件處理方法</h2><p>上面那種直接在 <code>v-on</code> 裡寫 JavaScript 的方法有時候很方便，但大多數事件處理會更複雜，不會只有一行 JavaScript，這個時候 Vue 的 <code>methods</code> 就登場了：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      count: 0
+    &#125;
+  &#125;,
+  methods: &#123;
+    addOne: function() &#123;
+      &#x2F;&#x2F; 做的事情就是將 count 加 1
+      this.count +&#x3D; 1
+    &#125;,
+
+    &#x2F;&#x2F; 簡寫
+    addTwo(num) &#123;
+      &#x2F;&#x2F; 將 count 加入傳入的數值
+      this.count +&#x3D; num
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>methods 這個物件在 Vue 裡是管理方法的地方。而在上面的是程式碼中，我們需要使用 this 來取用 <code>count</code> 這個資料屬性。這裡的 this 是指向 Vue 的實體，所以我們能在 methods 裡取用 <code>count</code>。</p>
+<p>接下來我們就用 <code>v-on</code> 來處理 methods 裡的方法：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;button @click&#x3D;&quot;addOne&quot;&gt;Add One&lt;&#x2F;button&gt;
+  &lt;!-- 可以像這樣傳遞參數 --&gt;
+  &lt;button @click&#x3D;&quot;addTwo(2)&quot;&gt;Add Two&lt;&#x2F;button&gt;
+  &lt;h1&gt;&#123;&#123; count &#125;&#125;&lt;&#x2F;h1&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<p><img src="https://i.imgur.com/AHwXr51.gif" alt="v-on 處理方法"></p>
+<hr>
+<h2 id="取用原生的-DOM-事件"><a href="#取用原生的-DOM-事件" class="headerlink" title="取用原生的 DOM 事件"></a>取用原生的 DOM 事件</h2><p>如果需要，我們可以用在方法傳入 <code>$event</code> 這個變數，來訪問原生地 DOM 事件：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;button @click&#x3D;&quot;getOrigin($event)&quot;&gt;Get DOM Event&lt;&#x2F;button&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javaScript" data-language="javaScript"><code class="language-javaScript">const app &#x3D; Vue.createApp(&#123;
+  methods: &#123;
+    getOrigin(event) &#123;
+      &#x2F;&#x2F; 能看到原生的方法以及 DOM 節點
+      console.log(event)
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<hr>
+<h2 id="處理多個方法"><a href="#處理多個方法" class="headerlink" title="處理多個方法"></a>處理多個方法</h2><p><code>v-on</code> 可以傳入多個方法，這些方法由逗號隔開，要注意的是處理多個方法時，都需要在方法後加括號：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;button @click&#x3D;&quot;addOne(), addTwo(2)&quot;&gt;Add One&lt;&#x2F;button&gt;
+  &lt;h1&gt;&#123;&#123; count &#125;&#125;&lt;&#x2F;h1&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<hr>
+<h2 id="事件修飾符"><a href="#事件修飾符" class="headerlink" title="事件修飾符"></a>事件修飾符</h2><p>有時候我們在防止事件冒泡或防止預設行為觸發時，會使用 <code>preventDefault()</code> 或 <code>stopPropagation()</code>，但 methods 在使用上的宗旨就是只有純粹的資料邏輯，而不是去處理 DOM 事件細節。</p>
+<p>為解決此問題，<code>v-on</code> 提供了事件修飾符：</p>
+<ul>
+<li><code>.stop</code>：防止事件冒泡(由內而外依序觸發事件)</li>
+<li><code>.prevent</code>：防止預設行為觸發，多用在 <code>submit</code> 事件</li>
+<li><code>.capture</code>：事件捕獲(由外而內出發事件)</li>
+<li><code>.self</code>：只觸發自己的事件，不包含子元素</li>
+<li><code>.once</code>：只會觸發一次，之後就無法在觸發</li>
+</ul>
+<hr>
+<h2 id="案件修飾符"><a href="#案件修飾符" class="headerlink" title="案件修飾符"></a>案件修飾符</h2><p>監聽鍵盤事件，我們會需要取用特定的按鍵，Vue 提供了鍵盤事件的修飾符：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;!-- 按下 ENTER 鍵時才調用 postWord 方法 --&gt;
+&lt;input type&#x3D;&quot;text&quot; @keyup.enter&#x3D;&quot;postWord&quot;&gt;</code></pre>
+<p>按鍵修飾符有以下這些：</p>
+<ul>
+<li><code>.enter</code></li>
+<li><code>.tab</code></li>
+<li><code>.delete</code> (Delete 鍵和 倒退鍵)</li>
+<li><code>.esc</code></li>
+<li><code>.space</code></li>
+<li><code>.up</code></li>
+<li><code>.down</code></li>
+<li><code>.left</code></li>
+<li><code>.right</code></li>
+<li><code>.ctrl</code></li>
+<li><code>.alt</code></li>
+<li><code>.shift</code></li>
+</ul>
+<hr>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="https://v3.cn.vuejs.org/guide/list.html">Vue 官網</a></p>
+]]></content>
+      <categories>
+        <category>Vue 3</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>前端</tag>
+        <tag>程式語言</tag>
+      </tags>
+  </entry>
+</search>
