@@ -1,0 +1,428 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>從零開始的 Vue3 生活- Computed 計算屬性 和 watch 監聽器 | &lt;TomDev /&gt;</title><meta name="keywords" content="Vue,前端,程式語言"><meta name="author" content="tom"><meta name="copyright" content="tom"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言這篇主要介紹 computed 和 watch 這兩個 Options API。  Computed 計算屬性在模板中表達式非常的便利，但如果在模板中放入太複雜的邏輯，它會讓模板過度複雜。例如，我們想反轉一個字串： &lt;div id&#x3D;&quot;app&quot;&gt;   &lt;p&gt;&amp;#123;&amp;#123; string.split(&#39;&#39;).rever">
+<meta property="og:type" content="article">
+<meta property="og:title" content="從零開始的 Vue3 生活- Computed 計算屬性 和 watch 監聽器">
+<meta property="og:url" content="http://tommm2.github.io/post/vue3(6)-Options-API.html">
+<meta property="og:site_name" content="&lt;TomDev &#x2F;&gt;">
+<meta property="og:description" content="前言這篇主要介紹 computed 和 watch 這兩個 Options API。  Computed 計算屬性在模板中表達式非常的便利，但如果在模板中放入太複雜的邏輯，它會讓模板過度複雜。例如，我們想反轉一個字串： &lt;div id&#x3D;&quot;app&quot;&gt;   &lt;p&gt;&amp;#123;&amp;#123; string.split(&#39;&#39;).rever">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/jGN5mBE.png">
+<meta property="article:published_time" content="2021-10-24T12:28:30.000Z">
+<meta property="article:modified_time" content="2021-10-25T05:54:18.968Z">
+<meta property="article:author" content="tom">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="程式語言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/jGN5mBE.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tommm2.github.io/post/vue3(6)-Options-API"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查詢的內容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '從零開始的 Vue3 生活- Computed 計算屬性 和 watch 監聽器',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-10-25 13:54:18'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><style type="text/css">#toggle-sidebar {bottom: 80px}</style><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="<TomDev />" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.imgur.com/m10kuus.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">3</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分類</div><div class="length-num">1</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home()</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives()</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags()</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories()</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.imgur.com/jGN5mBE.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">&lt;TomDev /&gt;</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜尋</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home()</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives()</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags()</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories()</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">從零開始的 Vue3 生活- Computed 計算屬性 和 watch 監聽器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2021-10-24T12:28:30.000Z" title="發表於 2021-10-24 20:28:30">2021-10-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2021-10-25T05:54:18.968Z" title="更新於 2021-10-25 13:54:18">2021-10-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Vue3/">Vue3</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字數總計:</span><span class="word-count">939</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀時長:</span><span>4分鐘</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="從零開始的 Vue3 生活- Computed 計算屬性 和 watch 監聽器"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">評論數:</span><span class="disqus-comment-count"><a href="http://tommm2.github.io/post/vue3(6)-Options-API.html#disqus_thread"></a></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇主要介紹 <code>computed</code> 和 <code>watch</code> 這兩個 Options API。</p>
+<hr>
+<h2 id="Computed-計算屬性"><a href="#Computed-計算屬性" class="headerlink" title="Computed 計算屬性"></a><code>Computed</code> 計算屬性</h2><p>在模板中表達式非常的便利，但如果在模板中放入太複雜的邏輯，它會讓模板過度複雜。例如，我們想反轉一個字串：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;p&gt;&#123;&#123; string.split(&#39;&#39;).reverse().join(&#39;&#39;) &#125;&#125;&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      string: &#39;Hello World&#39;
+    &#125;
+  &#125;
+&#125;)</code></pre>
+
+<p>在上面程式碼可以看到，我們在模板裡放入這種複雜的表達式，畫面會變得非常雜亂，為解決此問題，我們可以把這些表達式寫在 <code>computed</code> 屬性裡：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;p&gt;&#123;&#123; reversedString &#125;&#125;&lt;&#x2F;p&gt; &lt;!-- dlroW olleH --&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      string: &#39;Hello World&#39;
+    &#125;
+  &#125;,
+  computed: &#123;
+    reversedString() &#123;
+      return this.split(&#39;&#39;).reverse().join(&#39;&#39;)
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>computed 會將參考的資料結果暫存起來，當參考資料改變時，computed 就會重新計算。所以如果我們嘗試改變 <code>string</code> 的值，你會看到 <code>reversedString</code> 跟著變更。</p>
+<hr>
+<h2 id="computed-VS-methods"><a href="#computed-VS-methods" class="headerlink" title="computed VS methods"></a><code>computed</code> VS <code>methods</code></h2><p>這邊你可能會發現依靠 methods 也能達到同樣的效果，比如說：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;&#123;&#123; reversedString() &#125;&#125;&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      string: &#39;Hello World&#39;
+    &#125;
+  &#125;,
+  computed: &#123;
+    reversedString() &#123;
+      return this.split(&#39;&#39;).reverse().join(&#39;&#39;)
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>不同的是 computed 是依據參考資料的改變來去做計算，而 methods 是不管有沒有相依資料，只要觸發了就會改變。還有一點就是 computed 可以運用在 <code>v-for</code> 上：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;p v-for&#x3D;&quot;(item, index) in showed&quot;&gt;&#123;&#123; item.name &#125;&#125;&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      person: [
+        &#123; name: &#39;Tom&#39;, isShow: false &#125;,
+        &#123; name: &#39;Lucy&#39;, isShow: true &#125;,
+        &#123; name: &#39;Aible&#39;, isShow: true &#125;,
+      ]
+    &#125;
+  &#125;,
+  computed: &#123;
+    showed() &#123;
+      &#x2F;&#x2F; 顯示 isShow 等於 true 的人
+      return this.person.filter(item &#x3D;&gt; item.isShow &#x3D;&#x3D;&#x3D; true)
+    &#125;
+  &#125;,
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>以這種方式我們能在 <code>v-for</code> 計算大量的資料，並且當 <code>person</code> 有變動時，computed 也會更新。</p>
+<hr>
+<h2 id="getter-和-setter"><a href="#getter-和-setter" class="headerlink" title="getter 和 setter"></a>getter 和 setter</h2><p>computed 屬性預設只有 <code>getter</code>，但你也可以在需要使用時設定 <code>setter</code>，需要注意的是，如果你需要傳入 <code>getter</code> 和 <code>setter</code>，則要在 computed 使用 <code>object</code> 而不是 <code>function</code>，例如：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;p&gt;&#123;&#123; fullName &#125;&#125;&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      firstName: &#39;Curise&#39;,
+      lastName: &#39;Tom&#39;
+    &#125;
+  &#125;,
+  computed: &#123;
+    &#x2F;&#x2F; 使用物件形式
+    fullName: &#123;
+      get() &#123;
+        return this.firstName + &#39; &#39; + this.lastName
+      &#125;,
+      set(newValue) &#123;
+        &#x2F;&#x2F; do what you want to do...
+      &#125;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<blockquote>
+<p><strong>懶人包</strong></p>
+<ol>
+<li>使用 function 型式時，此時會作為 <code>getter</code>，且沒有 <code>setter</code></li>
+<li>使用 Object 型式時，使用 <code>get()</code>、<code>set()</code> 會作為 <code>getter</code>、<code>setter</code></li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="watch-監聽器"><a href="#watch-監聽器" class="headerlink" title="watch 監聽器"></a><code>watch</code> 監聽器</h2><p><code>watch</code> 在 Vue 中是用來檢查某個屬性值是否有出現變動，如果有則做出某些操作。例如我們想在一個名字欄位變動時就 console 出它已變動的訊息：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h4&gt;Name&lt;&#x2F;h4&gt;
+  &lt;input type&#x3D;&quot;text&quot; v-model&#x3D;&quot;name&quot;&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      name: &#39;tom&#39;,
+    &#125;
+  &#125;,
+  watch: &#123;
+    name(newVal, oldval) &#123;
+      console.log(&#96;Name is Changed to $&#123;newVal&#125;, old val is $&#123;oldval&#125;&#96;);
+    &#125;,
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p><img src="https://i.imgur.com/Fn5XpGn.gif" alt="watch"><br>這裡我們監聽 <code>name</code> 的屬性值，當 <code>name</code> 變動時，就用 console 印出訊息。</p>
+<blockquote>
+<p><strong>Tips</strong><br><code>watch</code> 監聽的對象可傳入兩個參數，第一個為改變後的值，第二個為改變前的值。</p>
+</blockquote>
+<hr>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a target="_blank" rel="noopener" href="https://v3.cn.vuejs.org/guide/list.html">Vue 官網</a><br><a target="_blank" rel="noopener" href="https://eruditeness.news.blog/2020/09/22/2020it%E9%82%A6%E9%90%B5%E4%BA%BA%E8%B3%BD-30%E5%A4%A9%E6%89%8B%E6%8A%8A%E6%89%8B%E7%9A%84vue-js%E6%95%99%E5%AD%B8-day9-%E8%AA%8D%E8%AD%98watch%E5%B1%AC%E6%80%A7/">Danny 的學習紀錄</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">tom</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="http://tommm2.github.io/post/vue3(6)-Options-API.html">http://tommm2.github.io/post/vue3(6)-Options-API.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="http://tommm2.github.io" target="_blank"><TomDev /></a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Vue/">Vue</a><a class="post-meta__tags" href="/tags/%E5%89%8D%E7%AB%AF/">前端</a><a class="post-meta__tags" href="/tags/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/">程式語言</a></div><div class="post_share"><div class="social-share" data-image="https://i.imgur.com/jGN5mBE.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/vue3(5)-%E4%BA%8B%E4%BB%B6%E7%9B%A3%E8%81%BD.html"><img class="next-cover" src="https://i.imgur.com/jGN5mBE.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">從零開始的 Vue3 生活- 事件監聽</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相關推薦</span></div><div class="relatedPosts-list"><div><a href="/post/vue3(1)-%E5%AE%89%E8%A3%9D.html" title="從零開始的 Vue3 生活-安裝環境及建立應用程式"><img class="cover" src="https://i.imgur.com/jGN5mBE.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-13</div><div class="title">從零開始的 Vue3 生活-安裝環境及建立應用程式</div></div></a></div><div><a href="/post/vue3(3)-vbind.html" title="從零開始的 Vue3 生活- 動態屬性指令 v-bind"><img class="cover" src="https://i.imgur.com/jGN5mBE.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-20</div><div class="title">從零開始的 Vue3 生活- 動態屬性指令 v-bind</div></div></a></div><div><a href="/post/vue3(2)-MVVM.html" title="從零開始的 Vue3 生活- MVVM 概念和 v-model"><img class="cover" src="https://i.imgur.com/jGN5mBE.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-17</div><div class="title">從零開始的 Vue3 生活- MVVM 概念和 v-model</div></div></a></div><div><a href="/post/vue3(4)-%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93%E8%88%87%E6%A2%9D%E4%BB%B6%E6%B8%B2%E6%9F%93.html" title="從零開始的 Vue3 生活- 列表渲染與條件渲染"><img class="cover" src="https://i.imgur.com/jGN5mBE.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-21</div><div class="title">從零開始的 Vue3 生活- 列表渲染與條件渲染</div></div></a></div><div><a href="/post/vue3(5)-%E4%BA%8B%E4%BB%B6%E7%9B%A3%E8%81%BD.html" title="從零開始的 Vue3 生活- 事件監聽"><img class="cover" src="https://i.imgur.com/jGN5mBE.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-22</div><div class="title">從零開始的 Vue3 生活- 事件監聽</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 評論</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Computed-%E8%A8%88%E7%AE%97%E5%B1%AC%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">Computed 計算屬性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#computed-VS-methods"><span class="toc-number">3.</span> <span class="toc-text">computed VS methods</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getter-%E5%92%8C-setter"><span class="toc-number">4.</span> <span class="toc-text">getter 和 setter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch-%E7%9B%A3%E8%81%BD%E5%99%A8"><span class="toc-number">5.</span> <span class="toc-text">watch 監聽器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">參考</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('https://i.imgur.com/8GF3gXf.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By tom</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">哈囉，歡迎你參觀我的部落格~</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直達評論"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到頂部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜尋</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜尋文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://tommm2.github.io/post/vue3(6)-Options-API.html'
+    this.page.identifier = '/post/vue3(6)-Options-API.html'
+    this.page.title = '從零開始的 Vue3 生活- Computed 計算屬性 和 watch 監聽器'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://tommm2.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://tommm2.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script></div><script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script>(function(d, w, c) {
+    w.ChatraID = 'bf8Fr2HoQAbDa2b5n';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

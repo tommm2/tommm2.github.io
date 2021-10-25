@@ -81,101 +81,6 @@ Vue.createApp(app).mount(&#39;#app&#39;)</code></pre>
       </tags>
   </entry>
   <entry>
-    <title>從零開始的 Vue3 生活- MVVM 概念和 v-model</title>
-    <url>//post/vue3(2)-MVVM.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇要來介紹一下 MVVM 模型，雖然 Vue 沒有完全遵循 MVVM 的概念，但 Vue 的設計也是受到此模型的影響。</p>
-<hr>
-<h2 id="甚麼是-MVVM"><a href="#甚麼是-MVVM" class="headerlink" title="甚麼是 MVVM?"></a>甚麼是 MVVM?</h2><p>是一種軟體架構模式，MVVM 的全名為 Model-View-ViewModel，它們分別代表：</p>
-<ul>
-<li>Model 是資料存取層(資料狀態)</li>
-<li>View 是畫面顯示層，也就是你現在看到的網頁(視圖)</li>
-<li>View-Model 是資料與顯示互動中介層(資料聯繫器)</li>
-</ul>
-<p><img src="https://i.imgur.com/rOMnhlL.png" alt="MVVM 示意圖"></p>
-<p>在 MVVM 架構下，View 和 Model 並沒有直接的聯繫，而是透過 View-Model 來進行交流。View-Model 透過資料雙向綁定將 View 和 Model 聯繫起來，使得 View 和 Model 的同步工作是自動的。所以當 Model 改變時，View 也會跟著做改變；反過來也是一樣。</p>
-<h2 id="v-model-資料雙向綁定"><a href="#v-model-資料雙向綁定" class="headerlink" title="v-model 資料雙向綁定"></a><code>v-model</code> 資料雙向綁定</h2><p><code>v-model</code> 這個指令常用在表單元素，為實現資料雙向綁定。</p>
-<h3 id="綁定-lt-input-gt-："><a href="#綁定-lt-input-gt-：" class="headerlink" title="綁定 &lt;input&gt;："></a>綁定 <code>&lt;input&gt;</code>：</h3><p><img src="https://i.imgur.com/hav89tS.gif" alt="input 綁定 v-model"></p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
-  &lt;input type&#x3D;&quot;text&quot; v-model&#x3D;&quot;name&quot;&#x2F;&gt;
-  &lt;span&gt;&#123;&#123; name &#125;&#125;&lt;&#x2F;span&gt;
-&lt;&#x2F;div&gt;</code></pre>
-
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
-  data() &#123;
-    return &#123;
-      name: &#39;&#39;,
-    &#125;
-  &#125;
-&#125;).mount(&#39;#app&#39;)</code></pre>
-
-<hr>
-<h3 id="綁定-lt-select-gt-："><a href="#綁定-lt-select-gt-：" class="headerlink" title="綁定 &lt;select&gt;："></a>綁定 <code>&lt;select&gt;</code>：</h3><p><img src="https://i.imgur.com/4yLiMB2.gif" alt="select 綁定 v-model"></p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
-  &lt;select v-model&#x3D;&quot;name&quot;&gt;
-    &lt;option value&#x3D;&quot;tom&quot;&gt;tom&lt;&#x2F;option&gt;
-    &lt;option value&#x3D;&quot;lucy&quot;&gt;lucy&lt;&#x2F;option&gt;
-    &lt;option value&#x3D;&quot;tony&quot;&gt;tony&lt;&#x2F;option&gt;
-  &lt;&#x2F;select&gt;
-  &lt;div&gt;
-    選擇的名字: &#123;&#123; name &#125;&#125;
-  &lt;&#x2F;div&gt;
-&lt;&#x2F;div&gt;</code></pre>
-
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
-  data() &#123;
-    return &#123;
-      name: &#39;&#39;,
-    &#125;
-  &#125;
-&#125;).mount(&#39;#app&#39;)</code></pre>
-
-<hr>
-<h3 id="綁定-checkbox"><a href="#綁定-checkbox" class="headerlink" title="綁定 checkbox"></a>綁定 checkbox</h3><p>checkbox 勾選和沒有勾選時預設會回傳 true 和 false。我們也可以透過 <code>:true-value</code> 和 <code>:false-value</code> 來決定回傳值：</p>
-<p><img src="https://i.imgur.com/ObpTR9z.gif" alt="checkbox 綁 v-model"></p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
-  &lt;h3&gt;預設取得 boolean 值&lt;&#x2F;h3&gt;
-  &lt;input type&#x3D;&quot;checkbox&quot; v-model&#x3D;&quot;markWithBoolean&quot;&gt;
-  &lt;div&gt;
-    以勾選: &#123;&#123; markWithBoolean &#125;&#125;
-  &lt;&#x2F;div&gt;
-  &lt;h3&gt;將預設的 true 和 false 值改成其他值&lt;&#x2F;h3&gt;
-  &lt;!-- 將 true 和 false 值分別改成 1 跟 0 --&gt;
-  &lt;input 
-    type&#x3D;&quot;checkbox&quot; 
-    v-model&#x3D;&quot;markWithNumber&quot; 
-    :true-value&#x3D;&quot;1&quot; 
-    :false-value&#x3D;&quot;0&quot;
-  &gt;
-  &lt;div&gt;
-    以勾選: &#123;&#123; markWithNumber &#125;&#125;
-  &lt;&#x2F;div&gt;
-&lt;&#x2F;div&gt;</code></pre>
-
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
-  data() &#123;
-    return &#123;
-      markWithBoolean: false,
-      markWithNumber: 0,
-    &#125;
-  &#125;
-&#125;).mount(&#39;#app&#39;)</code></pre>
-<h3 id="v-model-修飾符"><a href="#v-model-修飾符" class="headerlink" title="v-model 修飾符"></a><code>v-model</code> 修飾符</h3><p><code>v-model</code> 除了能做資料雙向綁定，還提供額外的修飾符(modifiers)</p>
-<p>用法: <code>v-model.xxx</code></p>
-<p><code>.lazy</code>：使用者離開 input 時才會更新資料</p>
-<p><code>.number</code>：強制將使用者輸入的數值轉成 Number 型別，輸入字串時轉換無效</p>
-<p><code>.trim</code>：將頭尾空白去除</p>
-<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a href="https://juejin.cn/post/6844903929298288647">掘金論壇</a><br><a href="https://cythilya.github.io/2017/04/14/vue-data-v-model/">Summer。桑莫。夏天</a></p>
-]]></content>
-      <categories>
-        <category>Vue3</category>
-      </categories>
-      <tags>
-        <tag>Vue</tag>
-        <tag>前端</tag>
-        <tag>程式語言</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>從零開始的 Vue3 生活- 動態屬性指令 v-bind</title>
     <url>//post/vue3(3)-vbind.html</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇主要說明 Vue 的 <code>v-bind</code> 指令，它可以將資料綁定在 HTML 的標籤上，是非常實用又常用的指令，但在介紹 <code>v-bind</code> 前，我們先來介紹比較簡單的兩個指令：<code>v-text</code> 和 <code>v-html</code>。</p>
@@ -335,6 +240,101 @@ Vue.createApp(app).mount(&#39;#app&#39;)</code></pre>
  &#125;).mount(&#39;#app&#39;)</code></pre>
 <hr>
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="https://v3.cn.vuejs.org/guide/class-and-style.html#%E7%BB%91%E5%AE%9A-html-class">Vue 官網</a></p>
+]]></content>
+      <categories>
+        <category>Vue3</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>前端</tag>
+        <tag>程式語言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>從零開始的 Vue3 生活- MVVM 概念和 v-model</title>
+    <url>//post/vue3(2)-MVVM.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇要來介紹一下 MVVM 模型，雖然 Vue 沒有完全遵循 MVVM 的概念，但 Vue 的設計也是受到此模型的影響。</p>
+<hr>
+<h2 id="甚麼是-MVVM"><a href="#甚麼是-MVVM" class="headerlink" title="甚麼是 MVVM?"></a>甚麼是 MVVM?</h2><p>是一種軟體架構模式，MVVM 的全名為 Model-View-ViewModel，它們分別代表：</p>
+<ul>
+<li>Model 是資料存取層(資料狀態)</li>
+<li>View 是畫面顯示層，也就是你現在看到的網頁(視圖)</li>
+<li>View-Model 是資料與顯示互動中介層(資料聯繫器)</li>
+</ul>
+<p><img src="https://i.imgur.com/rOMnhlL.png" alt="MVVM 示意圖"></p>
+<p>在 MVVM 架構下，View 和 Model 並沒有直接的聯繫，而是透過 View-Model 來進行交流。View-Model 透過資料雙向綁定將 View 和 Model 聯繫起來，使得 View 和 Model 的同步工作是自動的。所以當 Model 改變時，View 也會跟著做改變；反過來也是一樣。</p>
+<h2 id="v-model-資料雙向綁定"><a href="#v-model-資料雙向綁定" class="headerlink" title="v-model 資料雙向綁定"></a><code>v-model</code> 資料雙向綁定</h2><p><code>v-model</code> 這個指令常用在表單元素，為實現資料雙向綁定。</p>
+<h3 id="綁定-lt-input-gt-："><a href="#綁定-lt-input-gt-：" class="headerlink" title="綁定 &lt;input&gt;："></a>綁定 <code>&lt;input&gt;</code>：</h3><p><img src="https://i.imgur.com/hav89tS.gif" alt="input 綁定 v-model"></p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;input type&#x3D;&quot;text&quot; v-model&#x3D;&quot;name&quot;&#x2F;&gt;
+  &lt;span&gt;&#123;&#123; name &#125;&#125;&lt;&#x2F;span&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      name: &#39;&#39;,
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<hr>
+<h3 id="綁定-lt-select-gt-："><a href="#綁定-lt-select-gt-：" class="headerlink" title="綁定 &lt;select&gt;："></a>綁定 <code>&lt;select&gt;</code>：</h3><p><img src="https://i.imgur.com/4yLiMB2.gif" alt="select 綁定 v-model"></p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;select v-model&#x3D;&quot;name&quot;&gt;
+    &lt;option value&#x3D;&quot;tom&quot;&gt;tom&lt;&#x2F;option&gt;
+    &lt;option value&#x3D;&quot;lucy&quot;&gt;lucy&lt;&#x2F;option&gt;
+    &lt;option value&#x3D;&quot;tony&quot;&gt;tony&lt;&#x2F;option&gt;
+  &lt;&#x2F;select&gt;
+  &lt;div&gt;
+    選擇的名字: &#123;&#123; name &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      name: &#39;&#39;,
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+
+<hr>
+<h3 id="綁定-checkbox"><a href="#綁定-checkbox" class="headerlink" title="綁定 checkbox"></a>綁定 checkbox</h3><p>checkbox 勾選和沒有勾選時預設會回傳 true 和 false。我們也可以透過 <code>:true-value</code> 和 <code>:false-value</code> 來決定回傳值：</p>
+<p><img src="https://i.imgur.com/ObpTR9z.gif" alt="checkbox 綁 v-model"></p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h3&gt;預設取得 boolean 值&lt;&#x2F;h3&gt;
+  &lt;input type&#x3D;&quot;checkbox&quot; v-model&#x3D;&quot;markWithBoolean&quot;&gt;
+  &lt;div&gt;
+    以勾選: &#123;&#123; markWithBoolean &#125;&#125;
+  &lt;&#x2F;div&gt;
+  &lt;h3&gt;將預設的 true 和 false 值改成其他值&lt;&#x2F;h3&gt;
+  &lt;!-- 將 true 和 false 值分別改成 1 跟 0 --&gt;
+  &lt;input 
+    type&#x3D;&quot;checkbox&quot; 
+    v-model&#x3D;&quot;markWithNumber&quot; 
+    :true-value&#x3D;&quot;1&quot; 
+    :false-value&#x3D;&quot;0&quot;
+  &gt;
+  &lt;div&gt;
+    以勾選: &#123;&#123; markWithNumber &#125;&#125;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      markWithBoolean: false,
+      markWithNumber: 0,
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<h3 id="v-model-修飾符"><a href="#v-model-修飾符" class="headerlink" title="v-model 修飾符"></a><code>v-model</code> 修飾符</h3><p><code>v-model</code> 除了能做資料雙向綁定，還提供額外的修飾符(modifiers)</p>
+<p>用法: <code>v-model.xxx</code></p>
+<p><code>.lazy</code>：使用者離開 input 時才會更新資料</p>
+<p><code>.number</code>：強制將使用者輸入的數值轉成 Number 型別，輸入字串時轉換無效</p>
+<p><code>.trim</code>：將頭尾空白去除</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a href="https://juejin.cn/post/6844903929298288647">掘金論壇</a><br><a href="https://cythilya.github.io/2017/04/14/vue-data-v-model/">Summer。桑莫。夏天</a></p>
 ]]></content>
       <categories>
         <category>Vue3</category>
@@ -591,9 +591,9 @@ key: 3, id: 3, index: 2 name: test3    key: 2, id: 2,  index: 2, name: test2
         <category>Vue3</category>
       </categories>
       <tags>
+        <tag>Vue</tag>
         <tag>前端</tag>
         <tag>程式語言</tag>
-        <tag>Vue3</tag>
       </tags>
   </entry>
   <entry>
@@ -699,7 +699,143 @@ key: 3, id: 3, index: 2 name: test3    key: 2, id: 2,  index: 2, name: test2
 <h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="https://v3.cn.vuejs.org/guide/list.html">Vue 官網</a></p>
 ]]></content>
       <categories>
-        <category>Vue 3</category>
+        <category>Vue3</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>前端</tag>
+        <tag>程式語言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>從零開始的 Vue3 生活- Computed 計算屬性 和 watch 監聽器</title>
+    <url>//post/vue3(6)-Options-API.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇主要介紹 <code>computed</code> 和 <code>watch</code> 這兩個 Options API。</p>
+<hr>
+<h2 id="Computed-計算屬性"><a href="#Computed-計算屬性" class="headerlink" title="Computed 計算屬性"></a><code>Computed</code> 計算屬性</h2><p>在模板中表達式非常的便利，但如果在模板中放入太複雜的邏輯，它會讓模板過度複雜。例如，我們想反轉一個字串：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;p&gt;&#123;&#123; string.split(&#39;&#39;).reverse().join(&#39;&#39;) &#125;&#125;&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      string: &#39;Hello World&#39;
+    &#125;
+  &#125;
+&#125;)</code></pre>
+
+<p>在上面程式碼可以看到，我們在模板裡放入這種複雜的表達式，畫面會變得非常雜亂，為解決此問題，我們可以把這些表達式寫在 <code>computed</code> 屬性裡：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;p&gt;&#123;&#123; reversedString &#125;&#125;&lt;&#x2F;p&gt; &lt;!-- dlroW olleH --&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      string: &#39;Hello World&#39;
+    &#125;
+  &#125;,
+  computed: &#123;
+    reversedString() &#123;
+      return this.split(&#39;&#39;).reverse().join(&#39;&#39;)
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>computed 會將參考的資料結果暫存起來，當參考資料改變時，computed 就會重新計算。所以如果我們嘗試改變 <code>string</code> 的值，你會看到 <code>reversedString</code> 跟著變更。</p>
+<hr>
+<h2 id="computed-VS-methods"><a href="#computed-VS-methods" class="headerlink" title="computed VS methods"></a><code>computed</code> VS <code>methods</code></h2><p>這邊你可能會發現依靠 methods 也能達到同樣的效果，比如說：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;&#123;&#123; reversedString() &#125;&#125;&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      string: &#39;Hello World&#39;
+    &#125;
+  &#125;,
+  computed: &#123;
+    reversedString() &#123;
+      return this.split(&#39;&#39;).reverse().join(&#39;&#39;)
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>不同的是 computed 是依據參考資料的改變來去做計算，而 methods 是不管有沒有相依資料，只要觸發了就會改變。還有一點就是 computed 可以運用在 <code>v-for</code> 上：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;p v-for&#x3D;&quot;(item, index) in showed&quot;&gt;&#123;&#123; item.name &#125;&#125;&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      person: [
+        &#123; name: &#39;Tom&#39;, isShow: false &#125;,
+        &#123; name: &#39;Lucy&#39;, isShow: true &#125;,
+        &#123; name: &#39;Aible&#39;, isShow: true &#125;,
+      ]
+    &#125;
+  &#125;,
+  computed: &#123;
+    showed() &#123;
+      &#x2F;&#x2F; 顯示 isShow 等於 true 的人
+      return this.person.filter(item &#x3D;&gt; item.isShow &#x3D;&#x3D;&#x3D; true)
+    &#125;
+  &#125;,
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p>以這種方式我們能在 <code>v-for</code> 計算大量的資料，並且當 <code>person</code> 有變動時，computed 也會更新。</p>
+<hr>
+<h2 id="getter-和-setter"><a href="#getter-和-setter" class="headerlink" title="getter 和 setter"></a>getter 和 setter</h2><p>computed 屬性預設只有 <code>getter</code>，但你也可以在需要使用時設定 <code>setter</code>，需要注意的是，如果你需要傳入 <code>getter</code> 和 <code>setter</code>，則要在 computed 使用 <code>object</code> 而不是 <code>function</code>，例如：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;p&gt;&#123;&#123; fullName &#125;&#125;&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      firstName: &#39;Curise&#39;,
+      lastName: &#39;Tom&#39;
+    &#125;
+  &#125;,
+  computed: &#123;
+    &#x2F;&#x2F; 使用物件形式
+    fullName: &#123;
+      get() &#123;
+        return this.firstName + &#39; &#39; + this.lastName
+      &#125;,
+      set(newValue) &#123;
+        &#x2F;&#x2F; do what you want to do...
+      &#125;
+    &#125;
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<blockquote>
+<p><strong>懶人包</strong></p>
+<ol>
+<li>使用 function 型式時，此時會作為 <code>getter</code>，且沒有 <code>setter</code></li>
+<li>使用 Object 型式時，使用 <code>get()</code>、<code>set()</code> 會作為 <code>getter</code>、<code>setter</code></li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="watch-監聽器"><a href="#watch-監聽器" class="headerlink" title="watch 監聽器"></a><code>watch</code> 監聽器</h2><p><code>watch</code> 在 Vue 中是用來檢查某個屬性值是否有出現變動，如果有則做出某些操作。例如我們想在一個名字欄位變動時就 console 出它已變動的訊息：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h4&gt;Name&lt;&#x2F;h4&gt;
+  &lt;input type&#x3D;&quot;text&quot; v-model&#x3D;&quot;name&quot;&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">const app &#x3D; Vue.createApp(&#123;
+  data() &#123;
+    return &#123;
+      name: &#39;tom&#39;,
+    &#125;
+  &#125;,
+  watch: &#123;
+    name(newVal, oldval) &#123;
+      console.log(&#96;Name is Changed to $&#123;newVal&#125;, old val is $&#123;oldval&#125;&#96;);
+    &#125;,
+  &#125;
+&#125;).mount(&#39;#app&#39;)</code></pre>
+<p><img src="https://i.imgur.com/Fn5XpGn.gif" alt="watch"><br>這裡我們監聽 <code>name</code> 的屬性值，當 <code>name</code> 變動時，就用 console 印出訊息。</p>
+<blockquote>
+<p><strong>Tips</strong><br><code>watch</code> 監聽的對象可傳入兩個參數，第一個為改變後的值，第二個為改變前的值。</p>
+</blockquote>
+<hr>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="https://v3.cn.vuejs.org/guide/list.html">Vue 官網</a><br><a href="https://eruditeness.news.blog/2020/09/22/2020it%E9%82%A6%E9%90%B5%E4%BA%BA%E8%B3%BD-30%E5%A4%A9%E6%89%8B%E6%8A%8A%E6%89%8B%E7%9A%84vue-js%E6%95%99%E5%AD%B8-day9-%E8%AA%8D%E8%AD%98watch%E5%B1%AC%E6%80%A7/">Danny 的學習紀錄</a></p>
+]]></content>
+      <categories>
+        <category>Vue3</category>
       </categories>
       <tags>
         <tag>Vue</tag>
